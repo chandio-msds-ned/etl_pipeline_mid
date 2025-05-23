@@ -1,24 +1,17 @@
-import schedule
 import time
-from datetime import datetime
 from etl_pipeline import run_etl
 
-
-def job():
-    print(f"\nScheduled ETL run at {datetime.now().isoformat()}")
-    run_etl()
-
-
-# Schedule to run daily at midnight
-schedule.every().day.at("00:00").do(job)
-
-
 def start_scheduler():
-    print("Scheduler started. Waiting for next run...")
+    print("Starting scheduler to run ETL every 10 seconds (after previous run completes)...")
     while True:
-        schedule.run_pending()
-        time.sleep(60)
+        start_time = time.time()
 
+        try:
+            run_etl()
+        except Exception as e:
+            print(f"Error during ETL run: {e}")
 
-if __name__ == "__main__":
-    start_scheduler()
+        elapsed_time = time.time() - start_time
+        wait_time = max(10 - elapsed_time, 0)
+        print(f"Waiting {wait_time:.2f} seconds before next run...\n")
+        time.sleep(wait_time)

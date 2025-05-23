@@ -23,7 +23,7 @@ def load_csv_to_mongodb(csv_file, db_name, collection_name, mongo_uri):
 if __name__ == "__main__":
     config = load_config()
     load_csv_to_mongodb(
-        csv_file='output/xlsx_data.csv',
+        csv_file='output/final_cleaned_data.csv',
         db_name='etl_weather_db',
         collection_name='etl_weather_col',
         mongo_uri=config['mongo_uri']
